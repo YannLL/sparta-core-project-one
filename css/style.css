@@ -1,0 +1,28 @@
+.even {
+  color: green;
+  font-family: Courier;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.odd {
+  color: red;
+  font-family: Courier;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.selected {
+  background-color: azure;
+  border: solid black 1px;
+  padding: 5px;
+  font-weight: bold;
+}
+
+h1, h3 {
+  font-family: Courier;
+}
+
+h1 {
+  text-align: center;
+}
