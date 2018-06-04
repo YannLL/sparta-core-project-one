@@ -1,28 +1,64 @@
-.even {
-  color: green;
-  font-family: Courier;
-  font-size: 20px;
-  margin-bottom: 20px;
-}
 
-.odd {
-  color: red;
-  font-family: Courier;
-  font-size: 20px;
-  margin-bottom: 20px;
-}
-
-.selected {
-  background-color: azure;
-  border: solid black 1px;
-  padding: 5px;
-  font-weight: bold;
-}
-
-h1, h3 {
-  font-family: Courier;
-}
-
-h1 {
+.game-frame{
+  margin: 6% auto;
+  width: 100%;
+  border: 1px dashed black;
+  height: 35vw;
   text-align: center;
+  display: flex ;
+  background-color: honeydew;
+}
+
+.side-a{
+  position: relative;
+  width: 50%;
+}
+.net-a{
+  position:absolute;
+  width: 99%;
+  bottom: 0;
+  height: 25%;
+  border-right: 0.5vw solid black;
+}
+.net-b{
+  position:absolute;
+  width: 99%;
+  height: 25%;
+  bottom: 0;
+  border-left: 0.5vw solid black;
+}
+.side-b{
+  position: relative;
+  width: 50%;
+}
+
+.player1{
+  position: absolute;
+  left: 10%;
+  bottom: 0;
+  border-radius: 50%;
+  height:7vw;
+  width: 7vw;
+  border: 1px solid black;
+  background: linear-gradient(-6deg, #f40101 50%, ghostwhite 50%);
+}
+
+.player2{
+  position: absolute;
+  right: 10%;
+  bottom: 0;
+  border-radius: 50%;
+  height:7vw;
+  width: 7vw;
+  border: 1px solid black;
+  background: linear-gradient(108deg,#2a5fc4 30%, ghostwhite 53%, #f40101 85% );
+}
+
+.ball{
+  position: absolute;
+  left: 20%;
+  border-radius: 50%;
+  width: 1.5vw;
+  height: 1.5vw;
+  background-color: lime;
 }
