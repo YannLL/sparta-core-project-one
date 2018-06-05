@@ -167,7 +167,6 @@ $(document).ready(function(){
     if(ballBottom > gameFrameBottom) {
       dirY = "-";
       scoreCheck();
-      winCheck();
     }
 
     if(ballTop < gameFrameTop) {
