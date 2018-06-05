@@ -1,16 +1,18 @@
 $(document).ready(function(){
   // ===== RESOURCES =====
-
+  //player
   var player1 = $('#player1');
   var player2 = $('#player2');
+
+  //ball
   var ball = $('#ball');
-  var gameFrame = $('#gameFrame');
-  var start = $('.start');
   var dirX = "+"; //+ is left, - is right
   var dirY = "+"; //+ is down, - is up
   var velocity = 1;
   var gravity = 1;
 
+  var start = $('.start');
+  var gameFrame = $('#gameFrame');
 
   var gameFrameTop = gameFrame.offset().top;
   var gameFrameBottom = gameFrameTop + gameFrame.height();
@@ -32,13 +34,6 @@ $(document).ready(function(){
     //IF gravity is above -5, run a for loop drecrementing gravity back to -5
     // IF gravity is below -5, run a fo loop incrementing gravity up
 
-    // ball.css({`top`:`${posY}px`})
-    // if(dirY === "+"){
-    //   ball.css("top", gravity);
-    //   gravity = gravity * 1.03;
-    //   console.log("gravity applies");
-    // };
-
     // X-axis motion
     if(dirX === "+"){
       ball.css("left", velocity);
@@ -49,7 +44,7 @@ $(document).ready(function(){
       ball.css("left", velocity);
       velocity -= 7;
     };
-    
+
     // Y-Axis motion
     if(dirY === "+"){
       ball.css("top",gravity);
