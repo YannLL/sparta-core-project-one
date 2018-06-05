@@ -21,10 +21,6 @@ $(document).ready(function(){
 
 
   // ===== BALL PHYSICS =====
-  // $(ball).animate({bottom:-100}, 450, 'linear');
-
-
-
   setInterval(function(){
 
     var ballTop = ball.offset().top;
@@ -33,12 +29,28 @@ $(document).ready(function(){
     var ballRight = ballLeft + ball.width();
 
     // GRAVITY
+    //IF gravity is above -5, run a for loop drecrementing gravity back to -5
+    // IF gravity is below -5, run a fo loop incrementing gravity up
+
+    // ball.css({`top`:`${posY}px`})
     // if(dirY === "+"){
     //   ball.css("top", gravity);
     //   gravity = gravity * 1.03;
     //   console.log("gravity applies");
     // };
 
+    // X-axis motion
+    if(dirX === "+"){
+      ball.css("left", velocity);
+      velocity += 7;
+    };
+
+    if(dirX === "-"){
+      ball.css("left", velocity);
+      velocity -= 7;
+    };
+    
+    // Y-Axis motion
     if(dirY === "+"){
       ball.css("top",gravity);
       gravity ++
@@ -48,31 +60,6 @@ $(document).ready(function(){
     if(dirY === "-"){
       ball.css("top",gravity)
       gravity--;
-      };
-
-
-    //IF gravity is above -5, run a for loop drecrementing gravity back to -5
-    // IF gravity is below -5, run a fo loop incrementing gravity up
-    // ball.css({`top`:`${posY}px`})
-
-    // Y-Axis motion
-
-    // (debug) Gravity
-
-
-
-    // console.log(ball.offset());
-    // debugger;
-
-    // X-axis motion
-    if(dirX === "+"){
-        ball.css("left", velocity);
-        velocity += 7;
-      };
-
-    if(dirX === "-"){
-        ball.css("left", velocity);
-        velocity -= 7;
       };
 
 
@@ -87,29 +74,17 @@ $(document).ready(function(){
     };
 
     if(ballBottom > gameFrameBottom) {
-      console.log(`gravity is ${gravity}`);
       console.log("floor bounce =]");
       dirY = "-";
     }
 
     if(ballTop < gameFrameTop) {
-      console.log(`gravity is ${gravity}`);
       console.log("ceiling bounce =]");
       dirY = "+";
     }
 
 
   }, 10);
-
-
-  //
-  // console.log("ballTop is " +ballTop);
-  // console.log("ballBottom is " +ballBottom);
-  // console.log("ballLeft is " +ballLeft);
-  // console.log("gameFrameTop = "+ gameFrameTop);
-  // console.log("gameFrameBottom is " +gameFrameBottom);
-
-
 
 
 });
