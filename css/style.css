@@ -1,9 +1,22 @@
+main{
+  font-family: sans-serif;
+  text-align: center;
+}
+
+button{
+  font-weight: 600;
+}
+
+button:hover{
+  font-weight: 800;
+}
 
 .game-frame{
+  position: relative;
   margin: 6% auto;
   width: 100%;
-  border: 1px dashed black;
   height: 35vw;
+  border: 1px dashed black;
   text-align: center;
   display: flex ;
   background-color: honeydew;
@@ -39,7 +52,7 @@
   border-radius: 50%;
   height:7vw;
   width: 7vw;
-  border: 1px solid black;
+  border: 2.5px solid black;
   background: linear-gradient(-6deg, #f40101 50%, ghostwhite 50%);
 }
 
@@ -50,15 +63,15 @@
   border-radius: 50%;
   height:7vw;
   width: 7vw;
-  border: 1px solid black;
-  background: linear-gradient(108deg,#2a5fc4 30%, ghostwhite 53%, #f40101 85% );
+  border: 2.5px solid black;
+  background: linear-gradient(108deg,#2a5fc4 33%, ghostwhite 35%, ghostwhite 65%, #f40101 51% );
 }
 
 .ball{
   position: absolute;
   left: 20%;
   border-radius: 50%;
-  width: 1.5vw;
-  height: 1.5vw;
+  width: 2vw;
+  height: 2vw;
   background-color: lime;
 }
