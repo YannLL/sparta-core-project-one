@@ -3,6 +3,8 @@ $(document).ready(function(){
   //player
   var player1 = $('#player1');
   var player2 = $('#player2');
+  var player1Point = 0;
+  var player2Point = 0;
   var player1Score = 0;
   var player2Score = 0;
   var p1object = {};
@@ -55,23 +57,36 @@ $(document).ready(function(){
     });
 
     function movePlayers() {
-        for (var direction in keys) {
-            if (!keys.hasOwnProperty(direction)) continue;
-            if (direction == 65) {
-                $(player1).animate({left: "-=8"}, 0);
-            }
-            if (direction == 68) {
-                $(player1).animate({left: "+=8"}, 0);
-            }
-            if (direction == 37) {
-                $(player2).animate({left: "-=8"}, 0);
-            }
-            if (direction == 39) {
-                $(player2).animate({left: "+=8"}, 0);
-            }
+      for (var direction in keys) {
+        if (!keys.hasOwnProperty(direction)) continue;
+        if (direction == 65) {
+          $(player1).animate({left: "-=8"}, 0);
         }
-    };// END KEY BINDINGS ==========
+        if (direction == 68) {
+          $(player1).animate({left: "+=8"}, 0);
+        }
+        if (direction == 37) {
+          $(player2).animate({left: "-=8"}, 0);
+        }
+        if (direction == 39) {
+          $(player2).animate({left: "+=8"}, 0);
+        }
+      }
+  };// END KEY BINDINGS ==========
 
+  // ==== TIMER ====
+  var start = new Date;
+  var gameTime = setInterval(function() {
+    $('.timer').text((new Date - start) / 1000 + " Seconds");
+  }, 1000);
+
+  //=========================
+
+  // ===== START BUTTON =====
+  $("#reset").click(function(){
+    location.reload();
+  })
+  // ========================
 
   // ===== GAME PHYSICS =====
   setInterval(function(){
@@ -167,6 +182,7 @@ $(document).ready(function(){
     if(ballBottom > gameFrameBottom) {
       dirY = "-";
       scoreCheck();
+      winCheck();
     }
 
     if(ballTop < gameFrameTop) {
@@ -174,27 +190,47 @@ $(document).ready(function(){
       dirY = "+";
     }
 
-
+    console.log(player1Score);
   }, 10);
 
   // ===== WINNING MECHANISM ====
   function scoreCheck(){
     if (ballObject.right > sideARight) {
-      player1Score ++;
-      if(player1Score % 5 === 0){
+      player1Point ++;
+      if(player1Point % 5 === 0){
+        player1Score++;
         $(sideA).append("I");
         console.log("Polandball scores!");
       }
 
     }else if (ballObject.right<sideARight) {
-      player2Score ++;
-      console.log(player2Score);
-      if(player2Score % 5 === 0){
+      player2Point++
+      if(player2Point % 5 === 0){
+        player2Score ++;
         $(sideB).append("I");
         console.log("Franceball scores!");
       }
     }
   };
+
+  function winCheck(){
+    switch (player1Score) {
+      case (5):
+      clearTimeout(gameTime);
+      ball.hide();
+      $(sideA).append("- WINNER");
+      break;
+    };
+
+    switch (player2Score){
+      case (5):
+      clearTimeout(gameTime);
+      ball.hide();
+      $(sideB).append("- WINNER");
+      break;
+    };
+
+  }// END WINNING CONDITIONS
 
 
 });
