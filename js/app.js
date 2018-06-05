@@ -3,12 +3,17 @@ $(document).ready(function(){
   //player
   var player1 = $('#player1');
   var player2 = $('#player2');
+  var player1Point = 0;
+  var player2Point = 0;
+  var player1Score = 0;
+  var player2Score = 0;
   var p1object = {};
   var p2object = {};
 
+
   //ball
   var ball = $('#ball');
-  var dirX = "+"; //+ is left, - is right
+  var dirX = "+"; //+ is right, - is left
   var dirY = "+"; //+ is down, - is up
   var velocity = 1;
   var gravity = 1;
@@ -22,6 +27,18 @@ $(document).ready(function(){
   var gameFrameBottom = gameFrameTop + gameFrame.height();
   var gameFrameLeft = gameFrame.offset().left;
   var gameFrameRight = gameFrameLeft + gameFrame.width();
+  var sideA = $('#sideA');
+  var sideATop = sideA.offset().top;
+  var sideABottom = sideATop + sideA.height();
+  var sideALeft = sideA.offset().left;
+  var sideARight = sideALeft + sideA.width();
+
+  var sideB = $('#sideB');
+  var sideBTop = sideB.offset().top;
+  var sideBBottom = sideBTop + sideB.height();
+  var sideBLeft = sideB.offset().left;
+  var sideBRight = sideBLeft + sideB.width();
+
   //NET a
   //NET b
 
@@ -40,23 +57,36 @@ $(document).ready(function(){
     });
 
     function movePlayers() {
-        for (var direction in keys) {
-            if (!keys.hasOwnProperty(direction)) continue;
-            if (direction == 65) {
-                $(player1).animate({left: "-=8"}, 0);
-            }
-            if (direction == 68) {
-                $(player1).animate({left: "+=8"}, 0);
-            }
-            if (direction == 37) {
-                $(player2).animate({left: "-=8"}, 0);
-            }
-            if (direction == 39) {
-                $(player2).animate({left: "+=8"}, 0);
-            }
+      for (var direction in keys) {
+        if (!keys.hasOwnProperty(direction)) continue;
+        if (direction == 65) {
+          $(player1).animate({left: "-=8"}, 0);
         }
-    };// END KEY BINDINGS ==========
+        if (direction == 68) {
+          $(player1).animate({left: "+=8"}, 0);
+        }
+        if (direction == 37) {
+          $(player2).animate({left: "-=8"}, 0);
+        }
+        if (direction == 39) {
+          $(player2).animate({left: "+=8"}, 0);
+        }
+      }
+  };// END KEY BINDINGS ==========
 
+  // ==== TIMER ====
+  var start = new Date;
+  var gameTime = setInterval(function() {
+    $('.timer').text((new Date - start) / 1000 + " Seconds");
+  }, 1000);
+
+  //=========================
+
+  // ===== START BUTTON =====
+  $("#reset").click(function(){
+    location.reload();
+  })
+  // ========================
 
   // ===== GAME PHYSICS =====
   setInterval(function(){
@@ -70,9 +100,6 @@ $(document).ready(function(){
     ballObject.right = ballRight;
     ballObject.top = ballTop;
     ballObject.bottom = ballBottom;
-
-    // console.log(ballObject);
-
 
     //PLAYER VARIABLES
     //PLAYER1
@@ -100,9 +127,11 @@ $(document).ready(function(){
 
     //PLAYER COLLISION
     //Player1Collisions
+    //frontal
     if(ballObject.left < p1object.right &&
       ballObject.bottom > p1object.top &&
-      ballObject.right < p1object.top){
+      dirX == "-"
+      ){
       dirX = "+"
     };
 
@@ -142,15 +171,18 @@ $(document).ready(function(){
     //Frame box collisions
     if(ballRight > gameFrameRight){
       dirX = "-";
+      console.log("now on -");
     };
 
     if(ballLeft < gameFrameLeft){
       dirX = "+";
+      console.log("now on +");
     };
 
     if(ballBottom > gameFrameBottom) {
-      console.log("floor bounce =]");
       dirY = "-";
+      scoreCheck();
+      winCheck();
     }
 
     if(ballTop < gameFrameTop) {
@@ -158,7 +190,47 @@ $(document).ready(function(){
       dirY = "+";
     }
 
+    console.log(player1Score);
   }, 10);
+
+  // ===== WINNING MECHANISM ====
+  function scoreCheck(){
+    if (ballObject.right > sideARight) {
+      player1Point ++;
+      if(player1Point % 5 === 0){
+        player1Score++;
+        $(sideA).append("I");
+        console.log("Polandball scores!");
+      }
+
+    }else if (ballObject.right<sideARight) {
+      player2Point++
+      if(player2Point % 5 === 0){
+        player2Score ++;
+        $(sideB).append("I");
+        console.log("Franceball scores!");
+      }
+    }
+  };
+
+  function winCheck(){
+    switch (player1Score) {
+      case (5):
+      clearTimeout(gameTime);
+      ball.hide();
+      $(sideA).append("- WINNER");
+      break;
+    };
+
+    switch (player2Score){
+      case (5):
+      clearTimeout(gameTime);
+      ball.hide();
+      $(sideB).append("- WINNER");
+      break;
+    };
+
+  }// END WINNING CONDITIONS
 
 
 });

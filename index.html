@@ -20,19 +20,26 @@
 <body>
   <main>
     <div class="game-frame" id="gameFrame">
-      <div class="side-a">
-        SIDE A
+      <div class="side-a" id="sideA">
+        Polandball:
         <div class="net-a"></div>
         <div class="player1" id="player1"></div>
         <div class="ball" id="ball"></div>
       </div>
-      <div class="side-b">
-        SIDE B
+      <div class="side-b" id="sideB">
+        Franceball:
         <div class="net-b"></div>
         <div class="player2" id="player2"></div>
       </div>
     </div>
-    <!-- <button class="start">START</button> -->
+    <div class="timer"></div>
+    <button id="reset">RESET</button>
+    <div class="instructions">
+        <h1>Countryball Volley</h1>
+        <h2>Instructions</h2>
+        <p>Polandball: A = left | D = right</p>
+        <p>Franceball: &larr; = left | &rarr; = right</p>
+    </div>
   </main>
 </body>
 </html>
