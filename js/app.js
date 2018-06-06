@@ -17,44 +17,63 @@ $(document).ready(function(){
   var dirX = "+"; //+ is right, - is left
   var dirY = "+"; //+ is down, - is up
   var velocity = 1;
-  var gravity = 1;
+  var gravity = -9;
   var ballObject = {};
 
-
+  // GAME
   var start = $('.start');
   var gameFrame = $('#gameFrame');
+
+  // ===== START BUTTON =====
+  $("#reset").click(function(){
+    location.reload();
+  })
+  // ========================
+
+  // ==== TIMER ====
+  var start = new Date;
+  var gameTime = setInterval(function() {
+    $('.timer').text((new Date - start) / 1000 + " Seconds");
+  }, 1000);
 
   //ENVIRONMENT
   var gameFrameTop = gameFrame.offset().top;
   var gameFrameBottom = gameFrameTop + gameFrame.height();
   var gameFrameLeft = gameFrame.offset().left;
   var gameFrameRight = gameFrameLeft + gameFrame.width();
+
   var sideA = $('#sideA');
+  var sideAObject = {};
   var sideATop = sideA.offset().top;
   var sideABottom = sideATop + sideA.height();
   var sideALeft = sideA.offset().left;
   var sideARight = sideALeft + sideA.width();
+  sideAObject.left = sideALeft;
+  sideAObject.right = sideARight;
+  sideAObject.top = sideATop;
+  sideAObject.bottom = sideABottom;
 
   var sideB = $('#sideB');
+  var sideBObject = {};
   var sideBTop = sideB.offset().top;
   var sideBBottom = sideBTop + sideB.height();
   var sideBLeft = sideB.offset().left;
   var sideBRight = sideBLeft + sideB.width();
-
-  // var sba = $('#scoreboxA');
-  // var sbaTop = sba.offset().top;
-  // var sbaBottom = sbaTop + sba.height();
-  // var sbaLeft = sba.offset().left;
-  // var sbaRight = sbaLeft + sba.width();
+  sideBObject.left = sideBLeft;
+  sideBObject.right = sideBRight;
+  sideBObject.top = sideBTop;
+  sideBObject.bottom = sideBBottom;
 
   var net = $('#net');
+  var netObject = {};
   var netTop = net.offset().top;
   var netBottom = netTop + net.height();
   var netLeft = net.offset().left;
   var netRight = netLeft + net.width();
-
-
-
+  netObject.left = netLeft;
+  netObject.right = netRight;
+  netObject.top = netTop;
+  netObject.right = netRight;
 
   // END RESOURCES ==========
 
@@ -74,33 +93,25 @@ $(document).ready(function(){
       for (var direction in keys) {
         if (!keys.hasOwnProperty(direction)) continue;
         if (direction == 65) {
-          $(player1).animate({left: "-=8"}, 0);
+          if ($(player1).offset().left > sideALeft) {
+            $(player1).animate({left: "-=8"}, 0);
+          }
         }
         if (direction == 68) {
-          $(player1).animate({left: "+=8"}, 0);
+          if($(player1).offset().left + $(player1).width() < sideARight){
+            $(player1).animate({left: "+=8"}, 0);
+          }
         }
         if (direction == 37) {
+          if($(player2).offset().left > sideBLeft)
           $(player2).animate({left: "-=8"}, 0);
         }
         if (direction == 39) {
+          if($(player2).offset().left + $(player2).width() < sideBRight)
           $(player2).animate({left: "+=8"}, 0);
         }
       }
   };// END KEY BINDINGS ==========
-
-  // ==== TIMER ====
-  var start = new Date;
-  var gameTime = setInterval(function() {
-    $('.timer').text((new Date - start) / 1000 + " Seconds");
-  }, 1000);
-
-  //=========================
-
-  // ===== START BUTTON =====
-  $("#reset").click(function(){
-    location.reload();
-  })
-  // ========================
 
   // ===== GAME PHYSICS =====
   setInterval(function(){
@@ -138,27 +149,39 @@ $(document).ready(function(){
     p2object.top = p2Top;
     p2object.bottom = p2Bottom;
 
-    // GRAVITY
-    //IF gravity is above -5, run a for loop drecrementing gravity back to -5
-    //IF gravity is below -5, run a fo loop incrementing gravity up
-
     //PLAYER COLLISION
     //Player1Collisions
     //frontal
     if(ballObject.left < p1object.right &&
+      ballObject.right > p1object.left &&
       ballObject.bottom > p1object.top &&
+      ballObject.left > sideAObject.left &&
       dirX == "-"
       ){
-      dirX = "+"
+      dirX = "+";
+      dirY = "-";
+      console.log("player1 bounced");
     };
-    //
-    // //Player2Collisions
+
+    //Player2Collisions
+    // frontal
     if(ballObject.right > p2object.left &&
       ballObject.bottom > p2object.top &&
-      dirX == "+"
-      ){
+      ballObject.right < sideBObject.right &&
+      dirX == "+"){
       dirX = "-";
+      dirY = "-";
+      console.log("player2 bounced");
     };
+
+    // Net collisions
+    // dirX + in side A
+    if(ballObject.right > netObject.left &&
+      ballObject.bottom > netObject.top &&
+      ballObject.right < sideAObject.right &&
+      dirX == "+"){
+        dirX = "-"
+      }
 
     if(dirX == "-"){
       console.log("Going left (-)");
@@ -179,8 +202,8 @@ $(document).ready(function(){
 
     if(ballBottom > gameFrameBottom) {
       dirY = "-";
-      // scoreCheck();
-      // winCheck();
+      scoreCheck();
+      winCheck();
     }
 
     if(ballTop < gameFrameTop) {
@@ -202,12 +225,17 @@ $(document).ready(function(){
     // Y-Axis motion
     if(dirY === "+"){
       ball.css("top",gravity);
-      gravity+=2
+      gravity += 3
     };
 
     if(dirY === "-"){
       ball.css("top",gravity)
-      gravity-=2;
+      gravity -= 4.8;
+
+      setTimeout(function(){
+        gravity ++;
+      },0.5);
+
     };
 
   }, 5);
