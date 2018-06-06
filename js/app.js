@@ -1,29 +1,79 @@
 $(document).ready(function(){
+
   // ===== RESOURCES =====
   //player
   var player1 = $('#player1');
   var player2 = $('#player2');
+  var player1Point = 0;
+  var player2Point = 0;
+  var player1Score = 0;
+  var player2Score = 0;
   var p1object = {};
   var p2object = {};
 
+
   //ball
   var ball = $('#ball');
-  var dirX = "+"; //+ is left, - is right
+  var dirX = "+"; //+ is right, - is left
   var dirY = "+"; //+ is down, - is up
   var velocity = 1;
-  var gravity = 1;
+  var gravity = 0;
   var ballObject = {};
 
+  // GAME
   var start = $('.start');
   var gameFrame = $('#gameFrame');
+
+  // ===== START BUTTON =====
+  $("#reset").click(function(){
+    location.reload();
+  })
+  // ========================
+
+  // ==== TIMER ====
+  var start = new Date;
+  var gameTime = setInterval(function() {
+    $('.timer').text((new Date - start) / 1000 + " Seconds");
+  }, 1000);
 
   //ENVIRONMENT
   var gameFrameTop = gameFrame.offset().top;
   var gameFrameBottom = gameFrameTop + gameFrame.height();
   var gameFrameLeft = gameFrame.offset().left;
   var gameFrameRight = gameFrameLeft + gameFrame.width();
-  //NET a
-  //NET b
+
+  var sideA = $('#sideA');
+  var sideAObject = {};
+  var sideATop = sideA.offset().top;
+  var sideABottom = sideATop + sideA.height();
+  var sideALeft = sideA.offset().left;
+  var sideARight = sideALeft + sideA.width();
+  sideAObject.left = sideALeft;
+  sideAObject.right = sideARight;
+  sideAObject.top = sideATop;
+  sideAObject.bottom = sideABottom;
+
+  var sideB = $('#sideB');
+  var sideBObject = {};
+  var sideBTop = sideB.offset().top;
+  var sideBBottom = sideBTop + sideB.height();
+  var sideBLeft = sideB.offset().left;
+  var sideBRight = sideBLeft + sideB.width();
+  sideBObject.left = sideBLeft;
+  sideBObject.right = sideBRight;
+  sideBObject.top = sideBTop;
+  sideBObject.bottom = sideBBottom;
+
+  var net = $('#net');
+  var netObject = {};
+  var netTop = net.offset().top;
+  var netBottom = netTop + net.height();
+  var netLeft = net.offset().left;
+  var netRight = netLeft + net.width();
+  netObject.left = netLeft;
+  netObject.right = netRight;
+  netObject.top = netTop;
+  netObject.right = netRight;
 
   // END RESOURCES ==========
 
@@ -40,26 +90,36 @@ $(document).ready(function(){
     });
 
     function movePlayers() {
-        for (var direction in keys) {
-            if (!keys.hasOwnProperty(direction)) continue;
-            if (direction == 65) {
-                $(player1).animate({left: "-=8"}, 0);
-            }
-            if (direction == 68) {
-                $(player1).animate({left: "+=8"}, 0);
-            }
-            if (direction == 37) {
-                $(player2).animate({left: "-=8"}, 0);
-            }
-            if (direction == 39) {
-                $(player2).animate({left: "+=8"}, 0);
-            }
+      for (var direction in keys) {
+        if (!keys.hasOwnProperty(direction)) continue;
+        if (direction == 65) {
+          if ($(player1).offset().left > sideALeft) {
+            $(player1).animate({left: "-=8"}, 0);
+          }
         }
-    };// END KEY BINDINGS ==========
+        if (direction == 68) {
+          if($(player1).offset().left + $(player1).width() < sideARight){
+            $(player1).animate({left: "+=8"}, 0);
+          }
+        }
+        if (direction == 37) {
+          if($(player2).offset().left > sideBLeft)
+          $(player2).animate({left: "-=8"}, 0);
+        }
+        if (direction == 39) {
+          if($(player2).offset().left + $(player2).width() < sideBRight)
+          $(player2).animate({left: "+=8"}, 0);
+        }
+      }
+  };// END KEY BINDINGS ==========
+
 
 
   // ===== GAME PHYSICS =====
+
   setInterval(function(){
+
+  console.log(`Gravity is ${gravity}`);
 
     //BALL VARIABLES
     var ballTop = ball.offset().top;
@@ -70,9 +130,6 @@ $(document).ready(function(){
     ballObject.right = ballRight;
     ballObject.top = ballTop;
     ballObject.bottom = ballBottom;
-
-    // console.log(ballObject);
-
 
     //PLAYER VARIABLES
     //PLAYER1
@@ -97,49 +154,61 @@ $(document).ready(function(){
     p2object.top = p2Top;
     p2object.bottom = p2Bottom;
 
-
     //PLAYER COLLISION
     //Player1Collisions
+    //P1frontal
     if(ballObject.left < p1object.right &&
+      ballObject.right > p1object.left &&
       ballObject.bottom > p1object.top &&
-      ballObject.right < p1object.top){
-      dirX = "+"
-    };
-
-    //Player2Collisions
-    if(ballObject.right > p2object.left &&
-      ballObject.bottom > p2object.top
+      ballObject.left > sideAObject.left &&
+      dirX == "-"
       ){
-      dirX = "-"
+      dirX = "+";
+      dirY = "-";
+      console.log(`gravity from collision off player 1 = ${gravity}`);
     };
 
-    // GRAVITY
-    //IF gravity is above -5, run a for loop drecrementing gravity back to -5
-    // IF gravity is below -5, run a fo loop incrementing gravity up
-
-    // X-axis motion
-    if(dirX === "+"){
-      ball.css("left", velocity);
-      velocity += 7;
-    };
-
-    if(dirX === "-"){
-      ball.css("left", velocity);
-      velocity -= 7;
-    };
-
-    // Y-Axis motion
-    if(dirY === "+"){
-      ball.css("top",gravity);
-      gravity ++
-    };
-
-    if(dirY === "-"){
-      ball.css("top",gravity)
-      gravity--;
+    //P1dorsal
+    if(ballObject.right > p1object.left &&
+      ballObject.bottom > p1object.top &&
+      ballObject.left < sideBObject.left &&
+      dirX=="+"){
+        dirX="-";
+        dirY="-";
       };
 
-    //Frame box collisions
+
+    //Player2Collisions
+    //P2frontal
+    if(ballObject.right > p2object.left &&
+      ballObject.bottom > p2object.top &&
+      ballObject.right < sideBObject.right &&
+      dirX == "+"){
+
+      dirX = "-";
+      dirY = "-";
+    };
+
+    //P2dorsal
+    if(ballObject.left > p2object.right &&
+      ballObject.bottom > p2object.top &&
+      ballObject.right < sideAObject.right &&
+       dirX=="-"){
+
+         dirX="+";
+         dirY="-";
+       };
+
+    // Net collisions
+    // dirX + in side A
+    if(ballObject.right > netObject.left &&
+      ballObject.bottom > netObject.top &&
+      ballObject.right < sideAObject.right &&
+      dirX == "+"){
+        dirX = "-"
+      }
+
+    //FRAME BOX COLLISIONS
     if(ballRight > gameFrameRight){
       dirX = "-";
     };
@@ -149,16 +218,89 @@ $(document).ready(function(){
     };
 
     if(ballBottom > gameFrameBottom) {
-      console.log("floor bounce =]");
       dirY = "-";
+      gravity -= 4;
+      scoreCheck();
+      winCheck();
     }
 
     if(ballTop < gameFrameTop) {
-      console.log("ceiling bounce =]");
+      console.log(ball.offset().top);
       dirY = "+";
     }
 
-  }, 10);
+    // X-axis motion
+    if(dirX === "+"){
+      ball.css("left", velocity);
+      velocity += 3;
+    };
+
+    if(dirX === "-"){
+      ball.css("left", velocity);
+      velocity -= 1;
+    };
+
+    // Y-Axis motion
+    // Gravity incremental
+    if(dirY === "+"){
+      ball.css("top",gravity);
+      gravity += 3;
+    };
+
+
+    if(dirY === "-"){
+      ball.css("top",gravity)
+      gravity -= 4;
+      gravity +=1.1;
+    }
+
+  }, 5);
+
+
+  // ===== WINNING MECHANISM ====
+
+  function boxCheck(){
+    if(ballObject.right > sbaLeft);
+  }
+
+  function scoreCheck(){
+    if (ballObject.right > sideARight) {
+      player1Point ++;
+      if(player1Point % 5 === 0){
+        player1Score++;
+        $(sideA).append("I");
+        // console.log("Polandball scores!");
+      }
+
+    }else if (ballObject.right<sideARight) {
+      player2Point++
+      // console.log(player2Point);
+      if(player2Point % 5 === 0){
+        player2Score ++;
+        $(sideB).append("I");
+        // console.log("Franceball scores!");
+      }
+    }
+  };
+
+  function winCheck(){
+    switch (player1Score) {
+      case (5):
+      clearTimeout(gameTime);
+      ball.hide();
+      $(sideA).append("- WINNER");
+      break;
+    };
+
+    switch (player2Score){
+      case (5):
+      clearTimeout(gameTime);
+      ball.hide();
+      $(sideB).append("- WINNER");
+      break;
+    };
+
+  }// END WINNING MECHANISM =====
 
 
 });
