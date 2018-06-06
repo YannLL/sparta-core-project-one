@@ -3,12 +3,15 @@ $(document).ready(function(){
   //player
   var player1 = $('#player1');
   var player2 = $('#player2');
+  var player1Score = 0;
+  var player2Score = 0;
   var p1object = {};
   var p2object = {};
 
+
   //ball
   var ball = $('#ball');
-  var dirX = "+"; //+ is left, - is right
+  var dirX = "+"; //+ is right, - is left
   var dirY = "+"; //+ is down, - is up
   var velocity = 1;
   var gravity = 1;
@@ -22,6 +25,18 @@ $(document).ready(function(){
   var gameFrameBottom = gameFrameTop + gameFrame.height();
   var gameFrameLeft = gameFrame.offset().left;
   var gameFrameRight = gameFrameLeft + gameFrame.width();
+  var sideA = $('#sideA');
+  var sideATop = sideA.offset().top;
+  var sideABottom = sideATop + sideA.height();
+  var sideALeft = sideA.offset().left;
+  var sideARight = sideALeft + sideA.width();
+
+  var sideB = $('#sideB');
+  var sideBTop = sideB.offset().top;
+  var sideBBottom = sideBTop + sideB.height();
+  var sideBLeft = sideB.offset().left;
+  var sideBRight = sideBLeft + sideB.width();
+
   //NET a
   //NET b
 
@@ -71,9 +86,6 @@ $(document).ready(function(){
     ballObject.top = ballTop;
     ballObject.bottom = ballBottom;
 
-    // console.log(ballObject);
-
-
     //PLAYER VARIABLES
     //PLAYER1
     var p1Top = player1.offset().top;
@@ -100,9 +112,11 @@ $(document).ready(function(){
 
     //PLAYER COLLISION
     //Player1Collisions
+    //frontal
     if(ballObject.left < p1object.right &&
       ballObject.bottom > p1object.top &&
-      ballObject.right < p1object.top){
+      dirX == "-"
+      ){
       dirX = "+"
     };
 
@@ -142,15 +156,17 @@ $(document).ready(function(){
     //Frame box collisions
     if(ballRight > gameFrameRight){
       dirX = "-";
+      console.log("now on -");
     };
 
     if(ballLeft < gameFrameLeft){
       dirX = "+";
+      console.log("now on +");
     };
 
     if(ballBottom > gameFrameBottom) {
-      console.log("floor bounce =]");
       dirY = "-";
+      scoreCheck();
     }
 
     if(ballTop < gameFrameTop) {
@@ -158,7 +174,27 @@ $(document).ready(function(){
       dirY = "+";
     }
 
+
   }, 10);
+
+  // ===== WINNING MECHANISM ====
+  function scoreCheck(){
+    if (ballObject.right > sideARight) {
+      player1Score ++;
+      if(player1Score % 5 === 0){
+        $(sideA).append("I");
+        console.log("Polandball scores!");
+      }
+
+    }else if (ballObject.right<sideARight) {
+      player2Score ++;
+      console.log(player2Score);
+      if(player2Score % 5 === 0){
+        $(sideB).append("I");
+        console.log("Franceball scores!");
+      }
+    }
+  };
 
 
 });
