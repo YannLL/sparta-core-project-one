@@ -17,7 +17,7 @@ $(document).ready(function(){
   var dirX = "+"; //+ is right, - is left
   var dirY = "+"; //+ is down, - is up
   var velocity = 1;
-  var gravity = -9;
+  var gravity = 0;
   var ballObject = {};
 
   // GAME
@@ -113,8 +113,13 @@ $(document).ready(function(){
       }
   };// END KEY BINDINGS ==========
 
+
+
   // ===== GAME PHYSICS =====
+
   setInterval(function(){
+
+  console.log(`Gravity is ${gravity}`);
 
     //BALL VARIABLES
     var ballTop = ball.offset().top;
@@ -151,7 +156,7 @@ $(document).ready(function(){
 
     //PLAYER COLLISION
     //Player1Collisions
-    //frontal
+    //P1frontal
     if(ballObject.left < p1object.right &&
       ballObject.right > p1object.left &&
       ballObject.bottom > p1object.top &&
@@ -160,19 +165,39 @@ $(document).ready(function(){
       ){
       dirX = "+";
       dirY = "-";
-      console.log("player1 bounced");
+      console.log(`gravity from collision off player 1 = ${gravity}`);
     };
 
+    //P1dorsal
+    if(ballObject.right > p1object.left &&
+      ballObject.bottom > p1object.top &&
+      ballObject.left < sideBObject.left &&
+      dirX=="+"){
+        dirX="-";
+        dirY="-";
+      };
+
+
     //Player2Collisions
-    // frontal
+    //P2frontal
     if(ballObject.right > p2object.left &&
       ballObject.bottom > p2object.top &&
       ballObject.right < sideBObject.right &&
       dirX == "+"){
+
       dirX = "-";
       dirY = "-";
-      console.log("player2 bounced");
     };
+
+    //P2dorsal
+    if(ballObject.left > p2object.right &&
+      ballObject.bottom > p2object.top &&
+      ballObject.right < sideAObject.right &&
+       dirX=="-"){
+
+         dirX="+";
+         dirY="-";
+       };
 
     // Net collisions
     // dirX + in side A
@@ -182,14 +207,6 @@ $(document).ready(function(){
       dirX == "+"){
         dirX = "-"
       }
-
-    if(dirX == "-"){
-      console.log("Going left (-)");
-    };
-
-    if(dirX == "+"){
-      console.log("Going right (+)");
-    };
 
     //FRAME BOX COLLISIONS
     if(ballRight > gameFrameRight){
@@ -202,12 +219,13 @@ $(document).ready(function(){
 
     if(ballBottom > gameFrameBottom) {
       dirY = "-";
+      gravity -= 4;
       scoreCheck();
       winCheck();
     }
 
     if(ballTop < gameFrameTop) {
-      // console.log("ceiling bounce =]");
+      console.log(ball.offset().top);
       dirY = "+";
     }
 
@@ -219,26 +237,25 @@ $(document).ready(function(){
 
     if(dirX === "-"){
       ball.css("left", velocity);
-      velocity -= 3;
+      velocity -= 1;
     };
 
     // Y-Axis motion
+    // Gravity incremental
     if(dirY === "+"){
       ball.css("top",gravity);
-      gravity += 3
+      gravity += 3;
     };
+
 
     if(dirY === "-"){
       ball.css("top",gravity)
-      gravity -= 4.8;
-
-      setTimeout(function(){
-        gravity ++;
-      },0.5);
-
-    };
+      gravity -= 4;
+      gravity +=1.1;
+    }
 
   }, 5);
+
 
   // ===== WINNING MECHANISM ====
 

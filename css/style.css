@@ -52,6 +52,7 @@ button:hover{
   background-color: red;
 }
 
+
 .net {
   height:70px;
   width:10px;
@@ -91,8 +92,7 @@ button:hover{
 
 .ball{
   position: absolute;
-  top:350px;
-  right: 0;
+  left: 20%;
   border-radius: 50%;
   width: 2vw;
   height: 2vw;
