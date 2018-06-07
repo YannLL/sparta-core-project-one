@@ -33,7 +33,7 @@ button:hover{
   border-radius: 4px;
 }
 
-#reset{
+.reset{
   width: 20%;
   font-weight: bold;
   background-color:black;
