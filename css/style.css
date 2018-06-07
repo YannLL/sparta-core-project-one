@@ -1,3 +1,12 @@
+body{
+  background: url('../images/polandball.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+}
+h1{
+  color: gold;
+}
 main{
   font-family: sans-serif;
   text-align: center;
@@ -16,42 +25,44 @@ button:hover{
   margin: 6% auto;
   width: 800px;
   height: 400px;
-  border: 1px dashed black;
+  border: 5px solid gold;
   text-align: center;
   display: flex ;
-  background-color: honeydew;
+  color: ghostwhite;
+  background-color: rgba(234, 244, 121, 0.21);
+  border-radius: 4px;
 }
 
-.gameOver{
-  height: 100%;
-  width: 100%;
+#reset{
+  width: 20%;
+  font-weight: bold;
   background-color:black;
+  color: ghostwhite;
+  margin: 1% auto;
+  padding: 1%;
+  border: 2px solid ghostwhite;
+  border-radius: 4%;
+}
 
+.timer{
+  font-weight: bold;
+  color: gold;
+}
+
+.instructions{
+  background-color:black;
+  color: ghostwhite;
+  margin: 1% auto;
+  padding: 1%;
+  width: 20%;
+  border: 2px solid ghostwhite;
+  border-radius: 4%;
 }
 
 .side-a{
   position: relative;
   width: 50%;
 }
-
-.scoreboxB{
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  height:60px;
-  width: 60px;
-  background-color: blue;
-}
-
-.scoreboxA{
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height:60px;
-  width: 60px;
-  background-color: red;
-}
-
 
 .net {
   height:70px;
@@ -94,7 +105,7 @@ button:hover{
   position: absolute;
   left: 20%;
   border-radius: 50%;
-  width: 2vw;
-  height: 2vw;
+  width: 20px;
+  height: 20px;
   background-color: lime;
 }

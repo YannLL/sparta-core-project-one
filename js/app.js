@@ -17,8 +17,9 @@ $(document).ready(function(){
   var dirX = "+"; //+ is right, - is left
   var dirY = "+"; //+ is down, - is up
   var velocity = 1;
-  var gravity = 0;
+  var gravity = 50;
   var ballObject = {};
+  var aGrav;
 
   // GAME
   var start = $('.start');
@@ -27,14 +28,15 @@ $(document).ready(function(){
   // ===== START BUTTON =====
   $("#reset").click(function(){
     location.reload();
-  })
-  // ========================
+  })// ========================
 
   // ==== TIMER ====
   var start = new Date;
   var gameTime = setInterval(function() {
     $('.timer').text((new Date - start) / 1000 + " Seconds");
   }, 1000);
+  // ===============
+
 
   //ENVIRONMENT
   var gameFrameTop = gameFrame.offset().top;
@@ -119,7 +121,6 @@ $(document).ready(function(){
 
   setInterval(function(){
 
-  console.log(`Gravity is ${gravity}`);
 
     //BALL VARIABLES
     var ballTop = ball.offset().top;
@@ -165,11 +166,11 @@ $(document).ready(function(){
       ){
       dirX = "+";
       dirY = "-";
-      console.log(`gravity from collision off player 1 = ${gravity}`);
     };
 
     //P1dorsal
     if(ballObject.right > p1object.left &&
+      ballObject.right < p1object.right &&
       ballObject.bottom > p1object.top &&
       ballObject.left < sideBObject.left &&
       dirX=="+"){
@@ -183,6 +184,7 @@ $(document).ready(function(){
     if(ballObject.right > p2object.left &&
       ballObject.bottom > p2object.top &&
       ballObject.right < sideBObject.right &&
+      ballObject.right > sideBObject.right &&
       dirX == "+"){
 
       dirX = "-";
@@ -190,12 +192,11 @@ $(document).ready(function(){
     };
 
     //P2dorsal
-    if(ballObject.left > p2object.right &&
-      ballObject.bottom > p2object.top &&
-      ballObject.right < sideAObject.right &&
-       dirX=="-"){
-
-         dirX="+";
+    if(ballObject.bottom > p2object.top &&
+      ballObject.right > sideAObject.right &&
+      ballObject.right > p2object.left &&
+      ballObject.left < p2object.right &&
+       dirX==="-"){
          dirY="-";
        };
 
@@ -206,6 +207,7 @@ $(document).ready(function(){
       ballObject.right < sideAObject.right &&
       dirX == "+"){
         dirX = "-"
+        dirY = "-"
       }
 
     //FRAME BOX COLLISIONS
@@ -225,14 +227,14 @@ $(document).ready(function(){
     }
 
     if(ballTop < gameFrameTop) {
-      console.log(ball.offset().top);
       dirY = "+";
     }
+
 
     // X-axis motion
     if(dirX === "+"){
       ball.css("left", velocity);
-      velocity += 3;
+      velocity += 1.75;
     };
 
     if(dirX === "-"){
@@ -244,17 +246,16 @@ $(document).ready(function(){
     // Gravity incremental
     if(dirY === "+"){
       ball.css("top",gravity);
-      gravity += 3;
+      gravity += 2.75;
     };
 
 
     if(dirY === "-"){
       ball.css("top",gravity)
-      gravity -= 4;
-      gravity +=1.1;
+      gravity  -= 1.75 ;
     }
 
-  }, 5);
+  }, 10);
 
 
   // ===== WINNING MECHANISM ====
@@ -269,16 +270,13 @@ $(document).ready(function(){
       if(player1Point % 5 === 0){
         player1Score++;
         $(sideA).append("I");
-        // console.log("Polandball scores!");
       }
 
     }else if (ballObject.right<sideARight) {
       player2Point++
-      // console.log(player2Point);
       if(player2Point % 5 === 0){
         player2Score ++;
         $(sideB).append("I");
-        // console.log("Franceball scores!");
       }
     }
   };
