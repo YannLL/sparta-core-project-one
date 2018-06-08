@@ -184,9 +184,7 @@ $(document).ready(function(){
     if(ballObject.right > p2object.left &&
       ballObject.bottom > p2object.top &&
       ballObject.right < sideBObject.right &&
-      ballObject.right > sideBObject.right &&
       dirX == "+"){
-
       dirX = "-";
       dirY = "-";
     };
@@ -246,13 +244,13 @@ $(document).ready(function(){
     // Gravity incremental
     if(dirY === "+"){
       ball.css("top",gravity);
-      gravity += 2.75;
+      gravity += 2.95;
     };
 
 
     if(dirY === "-"){
       ball.css("top",gravity)
-      gravity  -= 1.75 ;
+      gravity  -= 2.95 ;
     }
 
   }, 10);
